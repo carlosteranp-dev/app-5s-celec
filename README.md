@@ -19,6 +19,22 @@ En esta carpeta también hay un servidor mínimo de desarrollo (sin caché, solo
 
 La app no necesita compilación: se publica tal cual, y todas sus rutas son relativas (funciona bajo `https://<usuario>.github.io/<repositorio>/`).
 
+### Publicación automática (recomendada)
+
+Haga doble clic en **`publicar.bat`** (o ejecute `powershell -ExecutionPolicy Bypass -File toolspublicar.ps1`). El script:
+
+1. revisa que estén Node y Git,
+2. sella el service worker y corre las pruebas (si algo falla, se detiene),
+3. guarda los cambios en git,
+4. conecta con GitHub si todavía no hay repositorio (pide la dirección de un repositorio **vacío** creado en github.com/new),
+5. pide que escriba **SI** antes de subir nada,
+6. sube el código y activa GitHub Pages (automático si tiene instalado GitHub CLI, `winget install GitHub.cli` y `gh auth login`; si no, le indica el único paso manual),
+7. muestra la dirección final de la app.
+
+`toolspublicar.ps1 -SoloVerificar` solo sella y corre las pruebas, sin guardar ni subir nada. Para actualizar la app más adelante se vuelve a hacer doble clic en `publicar.bat`.
+
+A mano, los pasos equivalentes son:
+
 1. **Antes de cada publicación**, selle el service worker (calcula la versión de la caché y la lista de archivos):
 
    ```bash
