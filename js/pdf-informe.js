@@ -328,7 +328,7 @@ function detalleFisico(ctx, fila) {
       fotoDe,
       columnas: {
         titulos: ['Código', 'Ítem', 'Calificación', 'Observación', 'Foto'],
-        estilos: { 0: { cellWidth: 14, fontStyle: 'bold' }, 1: { cellWidth: 54 }, 2: { cellWidth: 24 }, 3: { cellWidth: 46 }, 4: { cellWidth: LADO_FOTO.ancho + 3 } },
+        estilos: { 0: { cellWidth: 14, fontStyle: 'bold' }, 1: { cellWidth: 54 }, 2: { cellWidth: 24 }, 4: { cellWidth: LADO_FOTO.ancho + 3 } },
         celdas: (f) => [f.item.codigo, t(f.item.texto), t(`${f.valor} · ${inst.escala.find((e) => e.nivel === f.valor)?.nombre ?? ''}`), recortar(f.observacion) || '—'],
       },
     });
@@ -342,7 +342,7 @@ function detalleFisico(ctx, fila) {
       omitirFotos: datos.sinFotosBuenasPracticas,
       columnas: {
         titulos: ['Código', 'Ítem', 'Observación', 'Foto'],
-        estilos: { 0: { cellWidth: 14, fontStyle: 'bold' }, 1: { cellWidth: 68 }, 2: { cellWidth: 57 }, 3: { cellWidth: LADO_FOTO.ancho + 3 } },
+        estilos: { 0: { cellWidth: 14, fontStyle: 'bold' }, 1: { cellWidth: 68 }, 3: { cellWidth: LADO_FOTO.ancho + 3 } },
         celdas: (f) => [f.item.codigo, t(f.item.texto), recortar(f.observacion) || '—'],
       },
     });
@@ -398,7 +398,7 @@ function planDeAccion(ctx) {
       { content: atraso ? String(atraso) : '0', styles: { halign: 'center', textColor: atraso ? ROJO : TEXTO, fontStyle: atraso ? 'bold' : 'normal' } },
     ]),
     ...estiloTabla({ styles: { font: 'helvetica', fontSize: 8, cellPadding: 1.5, lineColor: '#C9D2DB', lineWidth: 0.2, textColor: TEXTO, valign: 'top' } }),
-    columnStyles: { 0: { cellWidth: 24 }, 1: { cellWidth: 24 }, 2: { cellWidth: 12 }, 3: { cellWidth: 44 }, 4: { cellWidth: 28 }, 5: { cellWidth: 22 }, 6: { cellWidth: 20 } },
+    columnStyles: { 0: { cellWidth: 24 }, 1: { cellWidth: 24 }, 2: { cellWidth: 12 }, 4: { cellWidth: 28 }, 5: { cellWidth: 22 }, 6: { cellWidth: 20 } }, // la acción toma el ancho restante
   });
   ctx.y = doc.lastAutoTable.finalY + 3;
   parrafo(ctx, `Días de atraso calculados al ${fechaCorta(datos.emision)} (fecha de emisión).`, { tamano: 8, color: GRIS });
