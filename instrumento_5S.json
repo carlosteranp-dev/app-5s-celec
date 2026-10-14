@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "titulo": "Instrumento de Evaluación 5S – CELEC SUR",
+    "organizacion": "CELEC EP – Unidad de Negocio Generación Sur",
+    "codigo_formato": "POR-ASIGNAR",
+    "version": "1.0-borrador",
+    "fecha_version": "2026-10-14",
+    "schema_version": 1
+  },
+  "escala": [
+    { "nivel": 0, "nombre": "No implementado", "criterio": "No hay evidencia de la práctica." },
+    { "nivel": 1, "nombre": "Inicial", "criterio": "Hay esfuerzos aislados; más cerca de 0 que de 2." },
+    { "nivel": 2, "nombre": "Parcial", "criterio": "La práctica existe en parte del área o de forma irregular." },
+    { "nivel": 3, "nombre": "Implementado", "criterio": "Cumple en casi toda el área; desviaciones menores y puntuales." },
+    { "nivel": 4, "nombre": "Sostenido", "criterio": "Cumple en toda el área, se mantiene en el tiempo y hay evidencia de seguimiento." }
+  ],
+  "tipos_area": [
+    { "codigo": "O", "nombre": "Operativa", "ejemplos": "Casa de máquinas, subestación, talleres, laboratorio" },
+    { "codigo": "B", "nombre": "Almacenamiento", "ejemplos": "Bodegas, áreas de residuos, patios de materiales" },
+    { "codigo": "A", "nombre": "Administrativa", "ejemplos": "Oficinas, archivo, salas administrativas" }
+  ],
+  "reglas": {
+    "max_na_por_s": 2,
+    "tipos_na": {
+      "automatico": "Ítem que no aplica al tipo de área (campo 'aplica') o ítem con na_en_primera_evaluacion en la primera evaluación del área. Se excluye del cálculo y NO cuenta para max_na_por_s.",
+      "manual": "El evaluador marca N/A porque el elemento no existe en el área (p. ej., no hay químicos). Requiere justificación escrita. Cuenta para max_na_por_s."
+    },
+    "min_items_calificados_por_s": 2,
+    "foto_obligatoria_en_niveles": [0, 1, 4],
+    "accion_obligatoria_en_niveles": [0, 1],
+    "duda_entre_niveles": "Asignar el nivel inferior y registrar la observación.",
+    "s_no_evaluable": "Una S es no evaluable si sus N/A manuales superan max_na_por_s o si quedan menos de min_items_calificados_por_s ítems calificados. Si alguna S es no evaluable, NO se emite resultado global; se reportan solo las S evaluadas.",
+    "regla_s_mas_debil": { "umbral_porcentaje": 60, "niveles_bloqueados": ["Implementado", "Sostenido"], "nivel_asignado": "En desarrollo" },
+    "calculo_s": "P_S = (suma de c_i) / (4 * n) * 100; n = ítems aplicables sin N/A",
+    "calculo_global": "P_global = suma(w_j * P_Sj), con suma(w_j) = 1"
+  },
+  "interpretacion": [
+    { "min": 0,  "max": 39.99, "nivel": "Crítico",       "color": "#C62828", "respuesta": "Plan de acción inmediato; reevaluar en 1 mes", "reevaluar_meses": 1 },
+    { "min": 40, "max": 59.99, "nivel": "Inicial",       "color": "#EF6C00", "respuesta": "Plan de acción; reevaluar en 2 meses", "reevaluar_meses": 2 },
+    { "min": 60, "max": 79.99, "nivel": "En desarrollo", "color": "#F9A825", "respuesta": "Acciones sobre las S más bajas; reevaluar en 3 meses", "reevaluar_meses": 3 },
+    { "min": 80, "max": 89.99, "nivel": "Implementado",  "color": "#2E7D32", "respuesta": "Mantener; reevaluar en 6 meses", "reevaluar_meses": 6 },
+    { "min": 90, "max": 100,   "nivel": "Sostenido",     "color": "#1565C0", "respuesta": "Referente para otras áreas; reevaluar en 6 meses", "reevaluar_meses": 6 }
+  ],
+  "modulos": [
+    {
+      "id": "fisico",
+      "nombre": "5S del área física",
+      "unidad_evaluada": "Área delimitada con un responsable asignado",
+      "pesos": { "S1": 0.2, "S2": 0.2, "S3": 0.2, "S4": 0.2, "S5": 0.2 },
+      "eses": [
+        {
+          "id": "S1", "nombre": "Seiri", "traduccion": "Clasificar",
+          "proposito": "En el área solo está lo necesario para el trabajo.",
+          "items": [
+            { "codigo": "S1.1", "texto": "Ausencia de elementos innecesarios (herramientas, equipos en desuso, materiales sobrantes)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Abundan elementos sin uso en el área", "2": "Hay algunos elementos sin uso en zonas puntuales", "4": "No hay elementos sin uso; todo lo presente tiene función" } },
+            { "codigo": "S1.2", "texto": "Gestión de innecesarios (tarjeta roja y zona de cuarentena)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "No existe mecanismo para identificar ni retirar innecesarios", "2": "Hay tarjetas o zona, pero sin seguimiento ni plazos", "4": "Tarjetas con registro, zona definida y retiro dentro del plazo" } },
+            { "codigo": "S1.3", "texto": "Cantidades de materiales, repuestos y consumibles acordes al uso", "aplica": ["O", "B"],
+              "descriptores": { "0": "Acumulación evidente o faltantes frecuentes", "2": "Algunos excesos; sin mínimos ni máximos definidos", "4": "Mínimos y máximos definidos y respetados" } },
+            { "codigo": "S1.4", "texto": "Documentos y archivos físicos y digitales depurados", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Documentos obsoletos mezclados con vigentes", "2": "Depuración parcial; quedan obsoletos en algunas ubicaciones", "4": "Solo documentos vigentes; obsoletos retirados o identificados" } },
+            { "codigo": "S1.5", "texto": "Residuos y chatarra segregados y retirados", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Residuos mezclados o acumulados en el área", "2": "Segregación parcial o retiro irregular", "4": "Segregados según tipo y retirados con la frecuencia definida" } }
+          ]
+        },
+        {
+          "id": "S2", "nombre": "Seiton", "traduccion": "Ordenar",
+          "proposito": "Cada elemento tiene un lugar definido, identificado y de fácil acceso.",
+          "items": [
+            { "codigo": "S2.1", "texto": "Ubicación definida y rotulada para cada elemento", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Elementos sin lugar fijo ni identificación", "2": "Lugares definidos solo para parte de los elementos", "4": "Todo tiene lugar rotulado y está en su sitio" } },
+            { "codigo": "S2.2", "texto": "Herramientas y equipos de uso frecuente accesibles (tableros de sombra o equivalente)", "aplica": ["O", "B"],
+              "descriptores": { "0": "Herramientas dispersas; se pierde tiempo buscándolas", "2": "Ordenadas, pero sin control visual de faltantes", "4": "Tablero de sombra o similar; un faltante se detecta a simple vista" } },
+            { "codigo": "S2.3", "texto": "Demarcación de pisos: pasillos, zonas de trabajo y de almacenamiento", "aplica": ["O", "B"],
+              "descriptores": { "0": "Sin demarcación o pasillos obstruidos", "2": "Demarcación incompleta o deteriorada", "4": "Demarcación completa, visible y respetada" } },
+            { "codigo": "S2.4", "texto": "Equipos de emergencia accesibles y señalizados (extintores, botiquín, duchas, tableros eléctricos)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Obstruidos o sin señalización", "2": "Señalizados, pero con obstrucciones puntuales", "4": "Libres de obstrucción, señalizados y con zona demarcada" } },
+            { "codigo": "S2.5", "texto": "Sustancias químicas almacenadas por compatibilidad, con etiqueta SGA y hoja de seguridad", "aplica": ["O", "B"],
+              "descriptores": { "0": "Sin etiqueta o almacenamiento incompatible", "2": "Etiquetadas, pero sin hojas de seguridad o sin contención de derrames", "4": "Etiqueta SGA, hojas de seguridad accesibles, compatibilidad y contención" } }
+          ]
+        },
+        {
+          "id": "S3", "nombre": "Seiso", "traduccion": "Limpiar",
+          "proposito": "Limpieza y su uso como inspección para detectar anomalías.",
+          "items": [
+            { "codigo": "S3.1", "texto": "Pisos, paredes, ventanas y superficies de trabajo limpios", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Suciedad generalizada", "2": "Limpieza aceptable con zonas descuidadas", "4": "Limpio en toda el área, incluidos rincones y zonas altas" } },
+            { "codigo": "S3.2", "texto": "Equipos limpios y limpieza usada como inspección", "aplica": ["O"],
+              "descriptores": { "0": "Equipos sucios; anomalías ocultas", "2": "Equipos limpios, pero sin registro de anomalías detectadas", "4": "Al limpiar se detectan y reportan anomalías (fugas, holguras, ruidos)" } },
+            { "codigo": "S3.3", "texto": "Fuentes de suciedad identificadas y controladas (fugas de aceite o agua, polvo)", "aplica": ["O", "B"],
+              "descriptores": { "0": "Fugas o fuentes activas sin atender", "2": "Fuentes identificadas, pero sin acción o solo con contención temporal", "4": "Fuentes eliminadas o controladas de forma permanente" } },
+            { "codigo": "S3.4", "texto": "Implementos de limpieza disponibles, completos y ordenados", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "No hay implementos o están en mal estado", "2": "Hay implementos, pero desordenados o incompletos", "4": "Completos, en buen estado y en su lugar definido" } },
+            { "codigo": "S3.5", "texto": "Plan de limpieza con responsables, frecuencia y registro", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "No hay plan", "2": "Plan definido, pero sin registros o con incumplimientos", "4": "Plan vigente, registros al día y cumplidos" } }
+          ]
+        },
+        {
+          "id": "S4", "nombre": "Seiketsu", "traduccion": "Estandarizar",
+          "proposito": "Las tres primeras S están definidas como estándar y son visibles.",
+          "items": [
+            { "codigo": "S4.1", "texto": "Estándares visuales publicados (foto de «así debe verse», ayudas visuales)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "No existen", "2": "Existen para parte del área o desactualizados", "4": "Publicados, vigentes y coinciden con el estado real" } },
+            { "codigo": "S4.2", "texto": "Controles visuales en equipos e instalaciones (rangos en manómetros, etiquetas de lubricación, código de colores)", "aplica": ["O"],
+              "descriptores": { "0": "No hay controles visuales", "2": "Controles en algunos equipos", "4": "Controles en los equipos críticos; una anomalía se ve a simple vista" } },
+            { "codigo": "S4.3", "texto": "Responsables por zona asignados y visibles (mapa 5S del área)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Sin responsables asignados", "2": "Asignados, pero no publicados o desactualizados", "4": "Mapa 5S publicado con responsables vigentes" } },
+            { "codigo": "S4.4", "texto": "Práctica 5S documentada y controlada en el SGI (procedimiento o instructivo)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Sin documento", "2": "Documento en elaboración o no difundido en el área", "4": "Documento aprobado, vigente y conocido en el área" } },
+            { "codigo": "S4.5", "texto": "Resultados de evaluaciones anteriores publicados en el área", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "No se publican", "2": "Publicados sin las acciones derivadas", "4": "Publicados con su tendencia y estado de acciones" } }
+          ]
+        },
+        {
+          "id": "S5", "nombre": "Shitsuke", "traduccion": "Disciplina",
+          "proposito": "La práctica se sostiene por hábito. S5.1 y S5.4 se verifican entrevistando a 2 o 3 personas del área.",
+          "items": [
+            { "codigo": "S5.1", "texto": "El personal conoce las 5S y su responsabilidad en el área", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "No conocen la metodología", "2": "Conocen el concepto, pero no su rol", "4": "Explican la práctica y su responsabilidad con ejemplos del área" } },
+            { "codigo": "S5.2", "texto": "Autoevaluaciones realizadas con la frecuencia definida", "aplica": ["O", "B", "A"], "na_en_primera_evaluacion": true,
+              "descriptores": { "0": "No se realizan", "2": "Se realizan de forma irregular", "4": "Se realizan según lo planificado, con registro" } },
+            { "codigo": "S5.3", "texto": "Acciones de evaluaciones anteriores cerradas a tiempo", "aplica": ["O", "B", "A"], "na_en_primera_evaluacion": true,
+              "descriptores": { "0": "Sin seguimiento a las acciones", "2": "Menos del 70 % cerradas a tiempo", "4": "90 % o más cerradas a tiempo y verificadas" } },
+            { "codigo": "S5.4", "texto": "Cumplimiento de las normas del área (EPP, señalética, orden al terminar la jornada)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Incumplimientos frecuentes", "2": "Incumplimientos puntuales", "4": "Cumplimiento sin necesidad de supervisión" } },
+            { "codigo": "S5.5", "texto": "Participación y mejora (sugerencias, mejoras implementadas, reconocimiento)", "aplica": ["O", "B", "A"],
+              "descriptores": { "0": "Sin iniciativas", "2": "Iniciativas aisladas, sin registro", "4": "Mejoras registradas e implementadas por el propio personal" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "digital",
+      "nombre": "5S Digital (ordenador del usuario)",
+      "unidad_evaluada": "Computador de un usuario del área",
+      "duracion_estimada_min": 15,
+      "reglas_confidencialidad": [
+        "El usuario está presente y es quien opera el equipo; el evaluador no lo manipula.",
+        "Se observan estructura, nombres, fechas y tamaños de archivos, nunca su contenido.",
+        "Las carpetas y archivos personales no se abren ni se califican.",
+        "Las fotos de evidencia muestran solo estructuras de carpetas o indicadores, sin datos sensibles."
+      ],
+      "agregacion_area": "Promedio de los usuarios evaluados; se reporta junto al resultado físico, sin combinarlos.",
+      "pesos": { "D1": 0.2, "D2": 0.2, "D3": 0.2, "D4": 0.2, "D5": 0.2 },
+      "eses": [
+        {
+          "id": "D1", "nombre": "Seiri digital", "traduccion": "Clasificar",
+          "items": [
+            { "codigo": "D1.1", "texto": "Escritorio del equipo sin archivos innecesarios", "aplica": ["D"],
+              "descriptores": { "0": "Escritorio saturado de archivos y accesos", "2": "Algunos archivos sueltos, pero navegable", "4": "Solo accesos directos de uso frecuente; ningún archivo suelto" } },
+            { "codigo": "D1.2", "texto": "Carpeta Descargas y archivos temporales depurados", "aplica": ["D"],
+              "descriptores": { "0": "Archivos acumulados de meses o años", "2": "Depuración parcial o reciente sin regularidad", "4": "Solo archivos recientes en proceso de uso" } },
+            { "codigo": "D1.3", "texto": "Sin duplicados ni versiones obsoletas de un mismo documento", "aplica": ["D"],
+              "descriptores": { "0": "Múltiples copias sin distinguir la vigente", "2": "Duplicados en algunas carpetas", "4": "Una sola versión vigente; versiones anteriores archivadas o eliminadas" } },
+            { "codigo": "D1.4", "texto": "Bandeja de entrada del correo depurada", "aplica": ["D"],
+              "descriptores": { "0": "Cientos de correos sin leer o sin clasificar", "2": "Bandeja parcialmente procesada", "4": "Bandeja con solo correos pendientes de acción" } }
+          ]
+        },
+        {
+          "id": "D2", "nombre": "Seiton digital", "traduccion": "Ordenar",
+          "items": [
+            { "codigo": "D2.1", "texto": "Estructura de carpetas definida y alineada a procesos o funciones", "aplica": ["D"],
+              "descriptores": { "0": "Sin estructura; archivos en la raíz", "2": "Estructura parcial o con más de 5 niveles", "4": "Estructura clara, por proceso o función, de 4 niveles como máximo" } },
+            { "codigo": "D2.2", "texto": "Nomenclatura de archivos aplicada (código, descripción, fecha, versión)", "aplica": ["D"],
+              "descriptores": { "0": "Nombres genéricos («Documento1», «final_final»)", "2": "Nomenclatura en parte de los archivos", "4": "Nomenclatura estándar en todos los archivos de trabajo" } },
+            { "codigo": "D2.3", "texto": "Información de trabajo en el repositorio institucional (OneDrive o SharePoint)", "aplica": ["D"],
+              "descriptores": { "0": "Todo en el disco local", "2": "Parte en el repositorio, parte solo en el disco local", "4": "Toda la información de trabajo en el repositorio, sincronizada" } },
+            { "codigo": "D2.4", "texto": "Correo y favoritos del navegador organizados", "aplica": ["D"],
+              "descriptores": { "0": "Sin carpetas ni organización", "2": "Organización parcial", "4": "Carpetas o reglas en el correo y favoritos agrupados por tema" } }
+          ]
+        },
+        {
+          "id": "D3", "nombre": "Seiso digital", "traduccion": "Limpiar",
+          "items": [
+            { "codigo": "D3.1", "texto": "Espacio libre en disco y papelera vaciada", "aplica": ["D"],
+              "descriptores": { "0": "Menos del 10 % libre", "2": "Entre 10 % y 20 % libre", "4": "Más del 20 % libre y papelera vacía" } },
+            { "codigo": "D3.2", "texto": "Sistema operativo y antivirus actualizados", "aplica": ["D"],
+              "descriptores": { "0": "Actualizaciones pendientes por más de un mes o antivirus vencido", "2": "Actualizaciones pendientes recientes", "4": "Todo actualizado" } },
+            { "codigo": "D3.3", "texto": "Sin software no autorizado ni archivos personales mezclados con los de trabajo", "aplica": ["D"],
+              "descriptores": { "0": "Software no autorizado o mezcla generalizada", "2": "Mezcla en algunas carpetas", "4": "Solo software autorizado; lo personal separado en su carpeta" } },
+            { "codigo": "D3.4", "texto": "Limpieza física del equipo y orden de cables", "aplica": ["D"],
+              "descriptores": { "0": "Equipo sucio y cables sueltos", "2": "Limpieza aceptable, cables desordenados", "4": "Equipo limpio y cables agrupados" } }
+          ]
+        },
+        {
+          "id": "D4", "nombre": "Seiketsu digital", "traduccion": "Estandarizar",
+          "items": [
+            { "codigo": "D4.1", "texto": "Estándar de carpetas y nomenclatura documentado y conocido por el usuario", "aplica": ["D"],
+              "descriptores": { "0": "No existe", "2": "Existe, pero el usuario no lo conoce", "4": "Documentado y el usuario lo explica" } },
+            { "codigo": "D4.2", "texto": "Documentos del SGI usados desde la fuente oficial, sin copias locales desactualizadas", "aplica": ["D"],
+              "descriptores": { "0": "Usa copias locales obsoletas", "2": "Copias locales vigentes, sin control", "4": "Siempre accede a la versión vigente en la fuente oficial" } },
+            { "codigo": "D4.3", "texto": "Respaldo de la información definido y verificado", "aplica": ["D"],
+              "descriptores": { "0": "Sin respaldo", "2": "Respaldo manual u ocasional", "4": "Respaldo automático o sincronizado y verificado" } },
+            { "codigo": "D4.4", "texto": "Uso de plantillas institucionales vigentes (formatos codificados)", "aplica": ["D"],
+              "descriptores": { "0": "Formatos propios o desactualizados", "2": "Mezcla de plantillas vigentes y antiguas", "4": "Solo plantillas vigentes" } }
+          ]
+        },
+        {
+          "id": "D5", "nombre": "Shitsuke digital", "traduccion": "Disciplina",
+          "items": [
+            { "codigo": "D5.1", "texto": "Prueba de localización: el usuario encuentra un documento de trabajo solicitado", "aplica": ["D"],
+              "descriptores": { "0": "No lo encuentra en 3 minutos", "2": "Lo encuentra entre 1 y 3 minutos", "4": "Lo encuentra en menos de 1 minuto" } },
+            { "codigo": "D5.2", "texto": "Bloqueo de sesión al ausentarse y contraseñas no expuestas", "aplica": ["D"],
+              "descriptores": { "0": "Sesión abierta sin supervisión o contraseña anotada a la vista", "2": "Bloqueo irregular", "4": "Bloquea siempre; ninguna contraseña a la vista" } },
+            { "codigo": "D5.3", "texto": "Depuración digital periódica realizada", "aplica": ["D"],
+              "descriptores": { "0": "Nunca se ha realizado", "2": "Realizada una vez, sin periodicidad", "4": "Realizada con la frecuencia definida" } },
+            { "codigo": "D5.4", "texto": "Archivos recientes cumplen la nomenclatura (muestra de los 5 últimos archivos)", "aplica": ["D"],
+              "descriptores": { "0": "Ninguno cumple", "2": "2 o 3 cumplen", "4": "Los 5 cumplen" } }
+          ]
+        }
+      ]
+    }
+  ]
+}

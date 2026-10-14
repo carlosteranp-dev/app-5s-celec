@@ -1,0 +1,11 @@
+# Herramientas y configuración local de desarrollo
+.claude/
+node_modules/
+*.log
+tools/salida-dev/
+
+# Datos de evaluaciones: contienen fotos y firmas, nunca deben subirse al repositorio
+Respaldo_5S_*.json
+Evaluaciones_5S_*.xlsx
+Acta_5S_*.pdf
+Informe_5S_*.pdf

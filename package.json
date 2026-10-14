@@ -1,0 +1,11 @@
+{
+  "name": "app-5s-celec-sur",
+  "version": "0.1.0",
+  "private": true,
+  "description": "App de evaluación 5S – CELEC SUR (PWA, JavaScript vanilla)",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "npx serve ."
+  }
+}

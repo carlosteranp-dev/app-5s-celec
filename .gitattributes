@@ -1,0 +1,6 @@
+# Finales de línea LF en todos los archivos de texto: el sellado del service worker (tools/sellar.mjs)
+# calcula un hash del contenido y debe dar lo mismo en cualquier sistema operativo.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
