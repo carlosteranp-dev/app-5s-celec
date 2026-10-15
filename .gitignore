@@ -9,3 +9,6 @@ Respaldo_5S_*.json
 Evaluaciones_5S_*.xlsx
 Acta_5S_*.pdf
 Informe_5S_*.pdf
+
+# Documentos institucionales (no se publican en GitHub Pages)
+documentos/
