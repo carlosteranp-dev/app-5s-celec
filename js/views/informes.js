@@ -2,7 +2,7 @@
 import * as db from '../db.js';
 import { ctx } from '../contexto.js';
 import { seleccionarInforme } from '../informe.js';
-import { esc, hoyLocal } from '../util.js';
+import { esc, fechaCorta, hoyLocal } from '../util.js';
 import { barraSuperior, toast } from '../ui.js';
 import { dialogoEntrega, dialogoExceso, dialogoProgreso } from '../entrega.js';
 import { sumarMeses } from '../calc.js';
@@ -34,6 +34,12 @@ export async function render(cont) {
   const [sitios, areas, evaluaciones, acciones] = await Promise.all([db.todos('sitios'), db.todos('areas'), db.todos('evaluaciones'), db.todos('acciones')]);
   const hoy = hoyLocal();
   const prefs = leerPreferencias();
+  // Las fechas NO se recuerdan entre visitas: un "hasta" guardado de ayer dejaría fuera lo evaluado hoy.
+  // Por defecto: los últimos 12 meses hasta hoy (o hasta la última evaluación, si su fecha es posterior a hoy).
+  const cerradas = evaluaciones.filter((e) => e.estado === 'cerrada' && !e.anulada);
+  const ultimaFecha = cerradas.map((e) => e.fecha).sort().at(-1);
+  const desdePorDefecto = sumarMeses(hoy, -12);
+  const hastaPorDefecto = ultimaFecha && ultimaFecha > hoy ? ultimaFecha : hoy;
   const ordenados = [...sitios].sort((a, b) => Number(b.activo) - Number(a.activo) || a.nombre.localeCompare(b.nombre, 'es'));
   const idsPrevios = new Set(prefs.sitioIds ?? sitios.filter((s) => s.activo).map((s) => s.id));
 
@@ -51,8 +57,8 @@ export async function render(cont) {
       </section>
       <section class="tarjeta">
         <h2>Periodo</h2>
-        <label class="campo"><span>Desde</span><input type="date" name="desde" value="${esc(prefs.desde ?? sumarMeses(hoy, -12))}"></label>
-        <label class="campo"><span>Hasta</span><input type="date" name="hasta" value="${esc(prefs.hasta ?? hoy)}"></label>
+        <label class="campo"><span>Desde</span><input type="date" name="desde" value="${esc(desdePorDefecto)}"></label>
+        <label class="campo"><span>Hasta</span><input type="date" name="hasta" value="${esc(hastaPorDefecto)}"></label>
         <small>Se usa la última evaluación cerrada de cada área dentro del periodo.</small>
       </section>
       <section class="tarjeta">
@@ -86,10 +92,20 @@ export async function render(cont) {
     return null;
   }
 
+  /** Explica por qué no hay nada que informar: casi siempre es el periodo (las evaluaciones cerradas caen fuera de las fechas). */
+  function sinResultados(f) {
+    const idsAreas = new Set(areas.filter((a) => f.sitioIds.includes(a.sitio_id)).map((a) => a.id));
+    const fechas = cerradas.filter((e) => idsAreas.has(e.area_id) && f.modulos.includes(e.modulo)).map((e) => e.fecha).sort();
+    if (fechas.length) {
+      return `Hay ${plural(fechas.length, 'evaluación cerrada', 'evaluaciones cerradas')} en estos sitios con fechas entre <strong>${fechaCorta(fechas[0])}</strong> y <strong>${fechaCorta(fechas.at(-1))}</strong>, fuera del periodo elegido. Ajuste "Desde" y "Hasta" para incluirlas.`;
+    }
+    return 'No hay evaluaciones cerradas en los sitios y módulos seleccionados. Solo cuentan las evaluaciones cerradas: los borradores no entran en el informe.';
+  }
+
   function actualizarVista() {
     const f = leerFiltro();
     const error = validar(f);
-    guardarPreferencias({ ...f, anonimo: form.anonimo.checked });
+    guardarPreferencias({ sitioIds: f.sitioIds, modulos: f.modulos, anonimo: form.anonimo.checked });
     aviso.classList.toggle('oculto', !error);
     aviso.textContent = error ?? '';
     if (error) {
@@ -111,7 +127,7 @@ export async function render(cont) {
            <li>${plural(informe.plan.length, 'acción abierta', 'acciones abiertas')} en el plan de acción</li>
          </ul>
          ${informe.sinEvaluar.length ? `<p class="aviso"><strong>${informe.sinEvaluar.length} área${informe.sinEvaluar.length === 1 ? '' : 's'} activa${informe.sinEvaluar.length === 1 ? '' : 's'} sin evaluación en el periodo:</strong> ${informe.sinEvaluar.map((x) => `${esc(x.area.nombre)} (${esc(x.sitio.nombre)})`).join(', ')}.</p>` : ''}`
-      : '<h2>Contenido del informe</h2><p class="aviso">No hay evaluaciones cerradas en los sitios, el periodo y los módulos seleccionados.</p>';
+      : `<h2>Contenido del informe</h2><p class="aviso">${sinResultados(f)}</p>`;
   }
 
   form.addEventListener('change', actualizarVista);
