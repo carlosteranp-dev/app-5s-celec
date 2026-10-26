@@ -1,0 +1,379 @@
+{
+  "meta": {
+    "fuente": "Muestra_68_sitios_5S.xlsx",
+    "fecha": "2026-10-26",
+    "nota": "Localidad = sitio de la app; Sector + Sitio del listado = área. El tipo es una sugerencia y se puede cambiar en la app."
+  },
+  "localidades": [
+    {
+      "nombre": "Molino",
+      "areas": [
+        {
+          "sector": "CASA DE MAQUINAS",
+          "nombre": "CAFETERIA",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "CASA DE MAQUINAS",
+          "nombre": "OFICINAS",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "EXTERIORES CCG",
+          "nombre": "EXTERIOR CCG",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "TALLER MECANICO",
+          "nombre": "Oficinas",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "TALLER MECANICO",
+          "nombre": "Bodegas",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "DRAGA - AMALUZA",
+          "nombre": "BODEGAS Y OFICINAS DRAGA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "JEFATURA MOLINO",
+          "nombre": "METROLOGIA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "OFICINA JEFATURA DE INGENIERÍA DE MANT.",
+          "nombre": "ARCHIVO",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "OFICINA JEFATURA DE INGENIERÍA DE MANT.",
+          "nombre": "INGENIERÍA DE MANTENIMIENTO",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "SEGURIDAD",
+          "nombre": "OFICINA",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "ÁREAS COMUNES",
+          "nombre": "TALLERES AUTOMOTRIZ",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "ÁREAS COMUNES",
+          "nombre": "TALLERES CARPINTERIA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "BODEGAS",
+          "nombre": "LUGAR DE BODEGAJE",
+          "tipo_sugerido": "B"
+        }
+      ]
+    },
+    {
+      "nombre": "Mazar",
+      "areas": [
+        {
+          "sector": "CASA DE MAQUINAS",
+          "nombre": "OFICINAS",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "CASA DE MAQUINAS",
+          "nombre": "TICS",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "CASA DE MAQUINAS",
+          "nombre": "SALA DE CONTROL",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "CASA DE MAQUINAS",
+          "nombre": "CAFETERIA",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "EXTERIORES CASA DE MAQUINAS",
+          "nombre": "DE SERVICIOS",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EXTERIORES CASA DE MAQUINAS",
+          "nombre": "BODEGA CENTRAL",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "EXTERIORES CASA DE MAQUINAS",
+          "nombre": "BODEGA CIVILES",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "OFICINAS ARENALES",
+          "nombre": "OFICINAS CENTRALES",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "CAMPAMENTOS",
+          "nombre": "BODEGAS",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "CAMPAMENTOS",
+          "nombre": "COMEDOR",
+          "tipo_sugerido": "A"
+        }
+      ]
+    },
+    {
+      "nombre": "Sopladora",
+      "areas": [
+        {
+          "sector": "NIVELES",
+          "nombre": "PISO GENERADORES",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "NIVELES",
+          "nombre": "BODEGA ELÉCTRICOS",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "NIVELES",
+          "nombre": "PISO TURBINAS + SALA DE COMPRESORES",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "NIVELES",
+          "nombre": "BODEGA MECÁNICOS HERRAMIENTAS",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "EDIFICIO DE CONTROL CASA DE MÁQUINAS",
+          "nombre": "SALA DE REPORTE + CAFETERÍA + SALA DE REUNIONES",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "EDIFICIO DE CONTROL CASA DE MÁQUINAS",
+          "nombre": "SALA DE CONTROL + CAFETERÍA + COMUNICACIONES + VESTIDORES",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO DE CONTROL CASA DE MÁQUINAS",
+          "nombre": "SALA TABLEROS DE PROTECCIÓN Y CONTROL + BODEGA ELECTRÓNICA + BODEGA ELÉCTRICA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO DE TALLERES",
+          "nombre": "TALLER MECÁNICO",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "TERRAZA + CUARTO DE BOMBAS + TANQUE + A/C",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "OFICINAS JEFATURAS + CAFETERIA",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "OFICINAS SUPERVISORES ´LABORATORIOS + COMUNICACIONES + ARCHIVO",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "SUBESTACIÓN",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "BODEGA DE CIVILES",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "PLANTA DE AGUAS RESIDUALES + AREAS EXTERNAS",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "VARIOS",
+          "nombre": "BAÑOS Y BODEGAS DE LIMPIEZA",
+          "tipo_sugerido": "B"
+        }
+      ]
+    },
+    {
+      "nombre": "Minas San Francisco",
+      "areas": [
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Taller mecánico",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Taller eléctrico",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Bodegas (incluye espacios externos)",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Cafetería",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Bodega - externa",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Bodega - Brigadas",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Taller automotriz",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "TALLERES Y BODEGAS",
+          "nombre": "Bodega de SSGG",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "NIVELES",
+          "nombre": "Bodega mecánico",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "NIVELES",
+          "nombre": "Bodega eléctrico",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "NIVELES",
+          "nombre": "Taller mecánico",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO DE CONTROL CASA DE MÁQUINAS",
+          "nombre": "Bodega zona transformadores.",
+          "tipo_sugerido": "B"
+        }
+      ]
+    },
+    {
+      "nombre": "Alazán",
+      "areas": [
+        {
+          "sector": "CAPTACIÓN Y CONDUCCIÓN",
+          "nombre": "CASETA DE GUARDIANÍA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "CAPTACIÓN Y CONDUCCIÓN",
+          "nombre": "TANQUE DE CARGA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "CASA DE MÁQUINAS",
+          "nombre": "TALLER METROLOGÍA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "CASA DE MÁQUINAS",
+          "nombre": "COMEDOR",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "OFICINAS",
+          "nombre": "BODEGA DE TOPOGRAFÍA",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "BODEGA Y TALLER",
+          "nombre": "TALLER MECÁNICO",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "OFICINAS JEFATURAS + CAFETERIA",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "EDIFICIO ADMINISTRATIVO",
+          "nombre": "BODEGA DE ELÉCTRICOS",
+          "tipo_sugerido": "B"
+        },
+        {
+          "sector": "DESCARGA",
+          "nombre": "EDIFICIO DESCARGA",
+          "tipo_sugerido": "O"
+        },
+        {
+          "sector": "VARIOS",
+          "nombre": "BAÑOS Y BODEGAS DE LIMPIEZA",
+          "tipo_sugerido": "B"
+        }
+      ]
+    },
+    {
+      "nombre": "Oficinas Cuenca",
+      "areas": [
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "Archivo de gestión Financiero",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "Archivo de gestión Jurídico",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "Archivo de gestión Proyectos",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "JURÍDICO",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "SEGUROS",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "DISPENSARIOS SSL",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "SSGG",
+          "tipo_sugerido": "A"
+        },
+        {
+          "sector": "Oficinas administrativas",
+          "nombre": "PROYECTOS",
+          "tipo_sugerido": "A"
+        }
+      ]
+    }
+  ]
+}

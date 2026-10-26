@@ -3,8 +3,8 @@
     "titulo": "Instrumento de Evaluación 5S – CELEC SUR",
     "organizacion": "CELEC EP – Unidad de Negocio Generación Sur",
     "codigo_formato": "POR-ASIGNAR",
-    "version": "1.0-borrador",
-    "fecha_version": "2026-10-14",
+    "version": "1.1-borrador",
+    "fecha_version": "2026-10-26",
     "schema_version": 1
   },
   "escala": [
@@ -58,10 +58,12 @@
               "descriptores": { "0": "No existe mecanismo para identificar ni retirar innecesarios", "2": "Hay tarjetas o zona, pero sin seguimiento ni plazos", "4": "Tarjetas con registro, zona definida y retiro dentro del plazo" } },
             { "codigo": "S1.3", "texto": "Cantidades de materiales, repuestos y consumibles acordes al uso", "aplica": ["O", "B"],
               "descriptores": { "0": "Acumulación evidente o faltantes frecuentes", "2": "Algunos excesos; sin mínimos ni máximos definidos", "4": "Mínimos y máximos definidos y respetados" } },
-            { "codigo": "S1.4", "texto": "Documentos y archivos físicos y digitales depurados", "aplica": ["O", "B", "A"],
+            { "codigo": "S1.4", "texto": "Documentos y archivos físicos depurados", "aplica": ["O", "B", "A"],
               "descriptores": { "0": "Documentos obsoletos mezclados con vigentes", "2": "Depuración parcial; quedan obsoletos en algunas ubicaciones", "4": "Solo documentos vigentes; obsoletos retirados o identificados" } },
-            { "codigo": "S1.5", "texto": "Residuos y chatarra segregados y retirados", "aplica": ["O", "B", "A"],
-              "descriptores": { "0": "Residuos mezclados o acumulados en el área", "2": "Segregación parcial o retiro irregular", "4": "Segregados según tipo y retirados con la frecuencia definida" } }
+            { "codigo": "S1.5", "texto": "Residuos y chatarra segregados y retirados", "aplica": ["O", "B"],
+              "descriptores": { "0": "Residuos mezclados o acumulados en el área", "2": "Segregación parcial o retiro irregular", "4": "Segregados según tipo y retirados con la frecuencia definida" } },
+            { "codigo": "S1.6", "texto": "Residuos de oficina (papel, cartón, plástico, tóner) segregados y retirados", "aplica": ["A"],
+              "descriptores": { "0": "Residuos de oficina mezclados o acumulados en el área", "2": "Segregación parcial o retiro irregular", "4": "Papel, cartón, plástico y tóner segregados según tipo y retirados con la frecuencia definida" } }
           ]
         },
         {

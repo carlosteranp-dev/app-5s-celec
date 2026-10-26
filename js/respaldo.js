@@ -68,6 +68,7 @@ function limpiarRespuesta(r) {
     na_justificacion: texto(r?.na_justificacion),
     observacion: texto(r?.observacion),
     foto_ids: Array.isArray(r?.foto_ids) ? r.foto_ids.filter((id) => typeof id === 'string').slice(0, MAX_FOTOS_POR_ITEM_IMPORTADAS) : [],
+    foto_na: Boolean(r?.foto_na),
   };
 }
 

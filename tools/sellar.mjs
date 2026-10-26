@@ -26,6 +26,7 @@ export function archivosDeLaApp() {
     'index.html',
     'manifest.webmanifest',
     INSTRUMENTO,
+    'catalogo_sitios.json',
     ...listar('css', (n) => n.endsWith('.css')),
     ...listar('js', (n) => n.endsWith('.js')),
     ...listar('lib', (n) => n.endsWith('.js')),

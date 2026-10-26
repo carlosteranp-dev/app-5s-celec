@@ -273,8 +273,11 @@ export async function render(cont, { id }) {
     }
     // Se descartan los bloques de acción vacíos y se vuelve a validar con lo que queda.
     const acciones = await db.accionesDeEvaluacion(ev.id);
-    for (const a of acciones.filter(accionVacia)) await db.eliminar('acciones', a.id);
-    const restantes = acciones.filter((a) => !accionVacia(a));
+    // También se descartan las acciones de ítems que ya no aplican (p. ej., si se corrigió el tipo de área).
+    const codigosNoAplican = new Set(itemsDelModulo(inst, ev.modulo).filter(({ item }) => esNaAutomatico(inst, item, ev.area_tipo, ev.es_primera_evaluacion)).map(({ item }) => item.codigo));
+    const sobran = (a) => accionVacia(a) || codigosNoAplican.has(a.codigo_item);
+    for (const a of acciones.filter(sobran)) await db.eliminar('acciones', a.id);
+    const restantes = acciones.filter((a) => !sobran(a));
     if (!validarCierre(inst, ev, { acciones: restantes }).puede) {
       toast('Todavía faltan datos para cerrar.');
       return pintar();

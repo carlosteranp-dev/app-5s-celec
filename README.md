@@ -129,14 +129,21 @@ Todo ítem, descriptor, umbral y peso se lee del JSON: cambiarlos no requiere to
 - **Niveles:** solo se usa el límite inferior `min` de cada rango; los huecos entre `max` y el siguiente `min` (p. ej. 39,99 → 40) no dejan valores sin nivel. El cálculo usa el valor sin redondear.
 - **Visualización:** 1 decimal; si el redondeo cruzaría un límite de nivel (79,96 → "80,0 %") se muestran 2 decimales truncados.
 - **Versiones del instrumento:** cada evaluación guarda `instrumento_version` e `instrumento_hash`, y la app guarda una copia del instrumento por versión+hash (store `instrumentos`) para interpretar evaluaciones antiguas. Un borrador sigue con la versión con la que empezó. Si el JSON cambia sin cambiar `meta.version`, se muestra una advertencia en el inicio.
-- **Área:** la evaluación congela `area_tipo` (define qué ítems aplican). El tipo de un área con evaluaciones no se puede cambiar.
+- **Área:** la evaluación congela `area_tipo` (define qué ítems aplican). El tipo del área se puede corregir (al editar el área, en "Nueva evaluación" o dentro de un borrador); las evaluaciones ya cerradas conservan el tipo con el que se hicieron. Un ítem que pasa a N/A automático conserva su calificación, observación y fotos, y las recupera si el tipo vuelve a ser uno al que aplica.
 - **Sitios y áreas** no se borran, solo se desactivan.
 - **Primera evaluación:** no hay otra evaluación cerrada y vigente (no anulada) del mismo módulo en el área. Se recalcula al abrir un borrador.
 - **Digital:** el resultado del área es el promedio de la última evaluación por equipo (`equipo_codigo`) en el periodo; en "Sitios y áreas" el periodo son los últimos 12 meses. Nunca se combina con el físico.
 - **Pendiente de exportar:** evaluación cerrada con `exportado_en` vacío, modificada después de exportarla, o con alguna acción modificada después.
 - **Fecha:** `fecha` es la fecha local (AAAA-MM-DD); `creado` y `modificado` van en UTC.
 - **Marca:** el azul y el amarillo se tomaron del logo; reemplazar si CELEC EP entrega valores oficiales.
-- `codigo_formato` es `POR-ASIGNAR` y `version` es `1.0-borrador` en el JSON: los informes los mostrarán tal cual hasta que se cambien.
+- `codigo_formato` es `POR-ASIGNAR` y `version` es `1.1-borrador` en el JSON: los informes los mostrarán tal cual hasta que se cambien.
+
+### Cambios de octubre (instrumento 1.1-borrador)
+
+- **Listado de sitios (`catalogo_sitios.json`):** lista inicial para elegir en la app (6 localidades y 68 áreas, tomadas de `Muestra_68_sitios_5S.xlsx`). La **Localidad** del listado es el **sitio** de la app y "Sector – Sitio" es el **área** (el mismo nombre, p. ej. "OFICINAS", se repite en varios sectores). En "Nueva evaluación" y en "Sitios y áreas" (botones "Agregar sitios del listado" y "Áreas del listado") se elige del listado, y siempre se puede escribir un sitio o área que no esté ("+ Otro sitio…", "+ Otra área…"). El tipo de área del listado es una **sugerencia** (cafetería, comedor, oficinas y archivos → administrativa; bodegas → almacenamiento; el resto → operativa) y se puede cambiar. Para actualizar el listado se edita ese archivo; se valida con `tests/catalogo.test.js`.
+- **"N/A foto":** junto a "Tomar foto" aparece este botón en los niveles que exigen foto (0, 1 y 4). Indica que no hay nada que evidenciar con una foto; no pide justificación y queda en el acta y el informe. La acción correctiva de 0 y 1 sigue siendo obligatoria. Los ítems con N/A (manual o automático) nunca piden foto ni acción.
+- **S1.4:** "Documentos y archivos físicos depurados" (lo digital se evalúa solo en 5S Digital).
+- **Residuos en áreas administrativas:** S1.5 (residuos y chatarra) aplica solo a operativas y de almacenamiento; el nuevo **S1.6** (residuos de oficina: papel, cartón, plástico y tóner) aplica solo a administrativas. El texto de S1.6 es una propuesta pendiente de aprobación del SGI. Las evaluaciones y borradores anteriores conservan la versión 1.0 del instrumento.
 
 ### Fase 2
 

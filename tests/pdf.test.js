@@ -73,7 +73,7 @@ test('el acta se genera con pie "Página X de Y", encabezado desde la página 2 
   assert.ok(!paginas[0].includes('Acta de Evaluación 5S ·'), 'la página 1 no lleva el encabezado de continuación');
   assert.ok(paginas[1].includes('Acta de Evaluación 5S'), 'la página 2 lleva encabezado');
   const todo = paginas.join('\n');
-  for (const esperado of ['POR-ASIGNAR', '1.0-borrador', 'Puntajes por S', 'Detalle de ítems', 'Evidencia fotográfica', 'Acciones correctivas', 'Firmas', 'No estuvo presente']) {
+  for (const esperado of ['POR-ASIGNAR', '1.1-borrador', 'Puntajes por S', 'Detalle de ítems', 'Evidencia fotográfica', 'Acciones correctivas', 'Firmas', 'No estuvo presente']) {
     assert.ok(todo.includes(esperado), `falta "${esperado}"`);
   }
   assert.ok(!todo.includes('😀'), 'el emoji se debe limpiar');

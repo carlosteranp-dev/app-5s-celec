@@ -90,14 +90,14 @@ test('una hoja por módulo más una de leyenda; solo evaluaciones cerradas y vig
   assert.equal(hojas[0].filas.length, 2); // sin la anulada ni el borrador
   assert.equal(hojas[1].filas.length, 1);
   assert.deepEqual(hojas[0].filas.map((f) => f[0]), ['Central Dos', 'Central Uno']);
-  assert.equal(hojas[2].filas.length, 25 + 20);
+  assert.equal(hojas[2].filas.length, 26 + 20); // 26 ítems físicos (S1.5 y S1.6 se reparten por tipo de área) + 20 digitales
 });
 
 test('columnas por S y por ítem tomadas del instrumento, y valores coherentes con el resultado', () => {
   const [fisico, digital] = construirHojas(datos());
   const titulos = fisico.columnas.map((c) => c.titulo);
   for (const esperado of ['Sitio', 'Área', 'Tipo de área', 'Resultado global (%)', 'Nivel', 'S1 Seiri (%)', 'S5 Shitsuke (%)', 'S1.1', 'S5.5', 'Versión del instrumento']) assert.ok(titulos.includes(esperado), `falta la columna ${esperado}`);
-  assert.equal(titulos.filter((t) => /^S\d\.\d$/.test(t)).length, 25);
+  assert.equal(titulos.filter((t) => /^S\d\.\d$/.test(t)).length, 26);
   assert.ok(digital.columnas.map((c) => c.titulo).includes('Equipo'));
   assert.equal(digital.columnas.filter((c) => /^D\d\.\d$/.test(c.titulo)).length, 20);
   // Cada fila tiene tantas celdas como columnas.

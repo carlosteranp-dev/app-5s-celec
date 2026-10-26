@@ -135,7 +135,7 @@ export function clasificarItems(inst, ev) {
       if (motivoNaAutomatico(inst, item, ev.area_tipo, ev.es_primera_evaluacion)) continue;
       const r = porCodigo.get(item.codigo);
       if (!r || r.na === 'manual' || !Number.isInteger(r.valor)) continue;
-      const fila = { item, ese, valor: r.valor, observacion: r.observacion ?? '', fotoIds: r.foto_ids ?? [] };
+      const fila = { item, ese, valor: r.valor, observacion: r.observacion ?? '', fotoIds: r.foto_ids ?? [], fotoNa: Boolean(r.foto_na) };
       if (nivelesAccion.includes(r.valor)) hallazgos.push(fila);
       else if (nivelesBuena.includes(r.valor)) buenasPracticas.push(fila);
     }

@@ -237,7 +237,7 @@ function tablaConFotos(ctx, filas, { columnas, fotoDe, instDe, omitirFotos = fal
     const foto = omitirFotos ? null : fotoDe(f);
     const celdaFoto = foto
       ? { content: '', styles: { minCellHeight: LADO_FOTO.alto + 2 }, foto }
-      : { content: omitirFotos ? 'Foto omitida' : f.fotoIds.length ? 'Foto no disponible' : 'Sin foto', styles: { textColor: GRIS, fontSize: 7.5 } };
+      : { content: omitirFotos ? 'Foto omitida' : f.fotoIds.length ? 'Foto no disponible' : f.fotoNa ? 'N/A foto (no se evidencia)' : 'Sin foto', styles: { textColor: GRIS, fontSize: 7.5 } };
     return [...columnas.celdas(f, instDe), celdaFoto];
   });
   doc.autoTable({

@@ -325,3 +325,6 @@ dialog .acciones-dialogo { display: flex; gap: .6rem; justify-content: flex-end;
 .resumen-importacion thead th { font-size: .85rem; color: var(--texto-suave); }
 .lista-conflictos { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .95rem; }
 .registro-importaciones li { padding: .4rem 0; border-bottom: 1px solid var(--borde); }
+
+/* Opción activa de un botón de dos estados (p. ej., "N/A foto") */
+.btn--activo { color: #fff; background: var(--no-evaluable); border-color: var(--no-evaluable); }

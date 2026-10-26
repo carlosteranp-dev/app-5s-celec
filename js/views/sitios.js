@@ -4,6 +4,7 @@ import { ctx } from '../contexto.js';
 import { promedioDigitalArea, tendencia, formatoGlobal, sumarMeses } from '../calc.js';
 import { esc, hoyLocal, fechaCorta, normalizarNombre } from '../util.js';
 import { barraSuperior, chipNivel, dialogoFormulario, confirmar, toast } from '../ui.js';
+import { areasDeLocalidad, asegurarArea, asegurarSitio, cargarCatalogo, dialogoElegirAreas, dialogoElegirLocalidades, localidadesDisponibles } from '../catalogo.js';
 
 const MESES_DIGITAL = 12; // periodo del "resultado digital" en esta pantalla (decisión D7)
 const FLECHA = { sube: '▲', baja: '▼', igual: '=' };
@@ -43,17 +44,17 @@ const camposSitio = (s = {}) => `
   <label class="campo"><span>Nombre del sitio</span><input type="text" name="nombre" value="${esc(s.nombre)}" placeholder="Ej.: Central Hidroeléctrica …"></label>
   <label class="campo"><span>Ubicación</span><input type="text" name="ubicacion" value="${esc(s.ubicacion)}" placeholder="Provincia, cantón o referencia"></label>`;
 
-function camposArea(a = {}, bloquearTipo = false) {
+function camposArea(a = {}, tieneEvaluaciones = false) {
   const tipos = ctx.instrumento.tipos_area;
   return `
   <label class="campo"><span>Nombre del área</span><input type="text" name="nombre" value="${esc(a.nombre)}" placeholder="Ej.: Casa de máquinas"></label>
   <label class="campo"><span>Tipo de área</span>
-    <select name="tipo" ${bloquearTipo ? 'disabled' : ''}>
+    <select name="tipo">
       <option value="">Seleccione…</option>
       ${tipos.map((t) => `<option value="${esc(t.codigo)}" ${a.tipo === t.codigo ? 'selected' : ''}>${esc(t.nombre)} (${esc(t.codigo)})</option>`).join('')}
     </select>
     <small>${tipos.map((t) => `<strong>${esc(t.nombre)}:</strong> ${esc(t.ejemplos)}`).join('<br>')}</small>
-    ${bloquearTipo ? '<small>El tipo no se puede cambiar porque el área ya tiene evaluaciones.</small>' : ''}
+    ${tieneEvaluaciones ? '<small>Puede cambiarlo. Las evaluaciones ya cerradas conservan el tipo con el que se hicieron.</small>' : ''}
   </label>
   <label class="campo"><span>Responsable del área</span><input type="text" name="responsable" value="${esc(a.responsable)}" placeholder="Nombre y cargo"></label>`;
 }
@@ -100,6 +101,7 @@ export async function render(cont) {
           <ul class="lista" style="margin-top:.75rem">${filas.join('') || '<li><small>Este sitio aún no tiene áreas.</small></li>'}</ul>
           <div class="acciones-fila">
             <button class="btn btn--chico btn--primario" data-nueva-area="${esc(s.id)}">+ Área</button>
+            <button class="btn btn--chico" data-areas-listado="${esc(s.id)}">Áreas del listado</button>
             <button class="btn btn--chico" data-editar-sitio="${esc(s.id)}">Editar sitio</button>
             <button class="btn btn--chico" data-activo-sitio="${esc(s.id)}">${s.activo ? 'Desactivar' : 'Reactivar'}</button>
           </div>
@@ -111,6 +113,7 @@ export async function render(cont) {
       ${barraSuperior('Sitios y áreas', '#/')}
       <div class="contenido pila">
         <button class="btn btn--primario btn--bloque" data-nuevo-sitio>+ Nuevo sitio</button>
+        <button class="btn btn--bloque" data-sitios-listado>Agregar sitios del listado</button>
         <label class="casilla"><input type="checkbox" data-inactivos ${mostrarInactivos ? 'checked' : ''}> Mostrar inactivos</label>
         ${bloques.join('') || '<div class="tarjeta"><p>Aún no hay sitios. Cree el primero con “Nuevo sitio”.</p></div>'}
       </div>`;
@@ -138,15 +141,37 @@ export async function render(cont) {
       camposHTML: camposArea(area ?? {}, tieneEvaluaciones),
       validar: (x) => {
         if (!x.nombre) return 'Escriba el nombre del área.';
-        if (!tieneEvaluaciones && !x.tipo) return 'Seleccione el tipo de área.';
+        if (!x.tipo) return 'Seleccione el tipo de área.';
         if (hermanas.some((h) => normalizarNombre(h.nombre) === normalizarNombre(x.nombre))) return 'Ya existe un área con ese nombre en este sitio.';
         return null;
       },
     });
     if (!v) return;
-    if (tieneEvaluaciones) v.tipo = area.tipo;
     await db.guardar('areas', area ? Object.assign(area, v) : db.crearEntidad({ ...v, sitio_id: sitioId, activo: true }));
     toast('Área guardada');
+  }
+
+  /** Agrega sitios (localidades) del listado; los que ya existen se omiten. */
+  async function agregarSitiosDelListado() {
+    const catalogo = await cargarCatalogo();
+    const disponibles = localidadesDisponibles(catalogo, await db.todos('sitios'));
+    if (!disponibles.length) return toast('El listado de sitios no está disponible en este momento.');
+    const elegidos = await dialogoElegirLocalidades(disponibles);
+    if (!elegidos?.length) return;
+    for (const nombre of elegidos) await asegurarSitio(nombre);
+    toast(`${elegidos.length} sitio${elegidos.length === 1 ? '' : 's'} agregado${elegidos.length === 1 ? '' : 's'}`);
+  }
+
+  /** Agrega áreas del listado a un sitio (con el tipo sugerido, que se puede cambiar). */
+  async function agregarAreasDelListado(sitioId) {
+    const sitio = await db.obtener('sitios', sitioId);
+    const catalogo = await cargarCatalogo();
+    const areas = areasDeLocalidad(catalogo, sitio.nombre, await db.porIndice('areas', 'sitio_id', sitioId));
+    if (!areas.length) return toast('Este sitio no tiene áreas en el listado. Use “+ Área” para crearlas.', 5000);
+    const elegidas = await dialogoElegirAreas({ localidad: sitio.nombre, areas, tipos: ctx.instrumento.tipos_area });
+    if (!elegidas?.length) return;
+    for (const a of elegidas) await asegurarArea(sitioId, { nombre: a.nombre, tipo: a.tipo_sugerido });
+    toast(`${elegidas.length} área${elegidas.length === 1 ? '' : 's'} agregada${elegidas.length === 1 ? '' : 's'}`);
   }
 
   async function alternarActivo(store, id, etiqueta) {
@@ -166,6 +191,8 @@ export async function render(cont) {
   cont.addEventListener('click', async (e) => {
     const t = (clave) => e.target.closest(`[data-${clave}]`)?.dataset[clave.replace(/-(\w)/g, (_, c) => c.toUpperCase())];
     if (e.target.closest('[data-nuevo-sitio]')) await formularioSitio();
+    else if (e.target.closest('[data-sitios-listado]')) await agregarSitiosDelListado();
+    else if (t('areas-listado')) await agregarAreasDelListado(t('areas-listado'));
     else if (t('nueva-area')) await formularioArea(t('nueva-area'));
     else if (t('editar-sitio')) await formularioSitio(await db.obtener('sitios', t('editar-sitio')));
     else if (t('editar-area')) {

@@ -190,7 +190,8 @@ function textoItem(ctx, item, r) {
     return { calificacion: 'N/A', observacion: `N/A manual. Justificación: ${r.na_justificacion ?? ''}${r.observacion ? `\n${r.observacion}` : ''}` };
   }
   if (Number.isInteger(r?.valor)) {
-    return { calificacion: `${r.valor} · ${descriptorNivel(inst, item, r.valor).nombre}`, observacion: r.observacion ?? '' };
+    const sinFoto = r.foto_na && !(r.foto_ids?.length > 0) ? 'N/A foto: no se evidencia.' : '';
+    return { calificacion: `${r.valor} · ${descriptorNivel(inst, item, r.valor).nombre}`, observacion: [r.observacion ?? '', sinFoto].filter(Boolean).join('\n') };
   }
   return { calificacion: 'Sin calificar', observacion: r?.observacion ?? '' };
 }

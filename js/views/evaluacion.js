@@ -42,6 +42,7 @@ export async function render(cont, { id, s }, query) {
   const acciones = await db.accionesDeEvaluacion(ev.id);
   const previas = !ev.es_primera_evaluacion && ese.items.some((i) => i.na_en_primera_evaluacion) ? resumenAccionesPrevias((await db.accionesDeArea(ev.area_id)).map((x) => x.accion), hoyLocal()) : null;
 
+  const usaTipos = modulo.eses.some((e) => e.items.some((i) => i.aplica.some((c) => inst.tipos_area.some((t) => t.codigo === c))));
   const resp = (codigo) => ev.respuestas.find((r) => r.codigo === codigo);
   const itemDe = (codigo) => ese.items.find((i) => i.codigo === codigo);
   const resaltarEsta = () => marcadas(ev.id).has(ese.id);
@@ -99,7 +100,8 @@ export async function render(cont, { id, s }, query) {
         <div class="fotos__botones">
           <button type="button" class="btn btn--chico" data-foto="camara" ${lleno ? 'disabled' : ''}>Tomar foto</button>
           <button type="button" class="btn btn--chico" data-foto="galeria" ${lleno ? 'disabled' : ''}>Galería</button>
-          <small>${lista.length}/${MAX_FOTOS_POR_ITEM} fotos${obligatoria ? ' · obligatoria' : ''}</small>
+          ${obligatoria ? `<button type="button" class="btn btn--chico ${r.foto_na ? 'btn--activo' : ''}" data-foto-na aria-pressed="${Boolean(r.foto_na)}" title="Use esta opción cuando no hay nada que fotografiar o no se puede evidenciar">${r.foto_na ? '✓ ' : ''}N/A foto</button>` : ''}
+          <small>${lista.length}/${MAX_FOTOS_POR_ITEM} fotos${obligatoria && !r.foto_na && !lista.length ? ' · obligatoria' : ''}${r.foto_na && !lista.length ? ' · sin foto: no se evidencia' : ''}</small>
         </div>
       </div>`;
   }
@@ -219,6 +221,9 @@ export async function render(cont, { id, s }, query) {
     <div class="items">
       <div class="tarjeta">
         <small>${esc(area?.nombre ?? '')} · ${esc(modulo.nombre)}${ev.usuario_nombre ? ` · ${esc(ev.usuario_nombre)}` : ''}</small>
+        ${usaTipos ? `<label class="campo"><span>Tipo de área de esta evaluación</span>
+          <select data-tipo-area>${inst.tipos_area.map((t) => `<option value="${esc(t.codigo)}" ${t.codigo === ev.area_tipo ? 'selected' : ''}>${esc(t.nombre)} (${esc(t.codigo)})</option>`).join('')}</select>
+          <small>Si no corresponde, cámbielo aquí: los ítems que no aplican pasan solos a N/A y también se actualiza el área.</small></label>` : ''}
         ${ese.proposito ? `<p>${esc(ese.proposito)}</p>` : ''}
         <p class="nota-duda"><strong>Si duda entre dos niveles:</strong> ${esc(inst.reglas.duda_entre_niveles)}</p>
         ${previas ? `<p class="nota-duda"><strong>Acciones previas del área:</strong> ${previas.total ? `${previas.a_tiempo} de ${previas.total} cerradas a tiempo (${Math.round(previas.porcentaje)} %)` : 'sin acciones con plazo vencido ni cerradas'}.</p>` : ''}
@@ -305,6 +310,7 @@ export async function render(cont, { id, s }, query) {
         }
         try {
           const f = await agregarFoto(ev, codigo, archivo);
+          resp(codigo).foto_na = false; // ya hay evidencia
           fotos.set(f.id, f);
           await db.guardar('evaluaciones', ev); // se guarda enseguida: la foto ya está en disco
         } catch (e) {
@@ -340,19 +346,24 @@ export async function render(cont, { id, s }, query) {
     const quitarAcc = e.target.closest('[data-accion-quitar]');
 
     if (nivel) {
-      Object.assign(r, { valor: Number(nivel.dataset.nivel), na: null, na_justificacion: '' });
+      const nuevoValor = Number(nivel.dataset.nivel);
+      Object.assign(r, { valor: nuevoValor, na: null, na_justificacion: '', foto_na: r.valor === nuevoValor ? r.foto_na : false });
       cambio();
       await ajustarAcciones(codigo);
       redibujar(codigo).querySelector(`[data-nivel="${nivel.dataset.nivel}"]`).focus();
     } else if (e.target.closest('[data-na]')) {
-      Object.assign(r, { valor: null, na: 'manual' });
+      Object.assign(r, { valor: null, na: 'manual', foto_na: false });
       cambio();
       await ajustarAcciones(codigo);
       redibujar(codigo).querySelector('[data-campo="na_justificacion"]')?.focus();
     } else if (e.target.closest('[data-quitar]')) {
-      Object.assign(r, { valor: null, na: null, na_justificacion: '' });
+      Object.assign(r, { valor: null, na: null, na_justificacion: '', foto_na: false });
       cambio();
       await ajustarAcciones(codigo);
+      redibujar(codigo);
+    } else if (e.target.closest('[data-foto-na]')) {
+      r.foto_na = !r.foto_na;
+      cambio();
       redibujar(codigo);
     } else if (foto) {
       codigoFoto = codigo;
@@ -384,6 +395,23 @@ export async function render(cont, { id, s }, query) {
         redibujar(codigo);
       }
     }
+  });
+
+  // Corregir el tipo de área: los ítems que no aplican pasan a N/A automático (sin perder lo ya calificado) y se actualiza el área.
+  cont.addEventListener('change', async (e) => {
+    if (!e.target.matches('[data-tipo-area]')) return;
+    const nuevo = e.target.value;
+    if (nuevo === ev.area_tipo) return;
+    ev.area_tipo = nuevo;
+    ev.respuestas = sincronizarRespuestas(inst, ev.modulo, ev.respuestas, { tipoArea: nuevo, esPrimera: ev.es_primera_evaluacion });
+    if (area && area.tipo !== nuevo) {
+      area.tipo = nuevo;
+      await db.guardar('areas', area);
+    }
+    await guardador.vaciar();
+    await db.guardar('evaluaciones', ev);
+    toast('Tipo de área actualizado: los ítems que no aplican pasan a N/A automático.', 5000);
+    window.dispatchEvent(new HashChangeEvent('hashchange')); // vuelve a dibujar esta pantalla con los ítems del nuevo tipo
   });
 
   cont.addEventListener('input', (e) => {

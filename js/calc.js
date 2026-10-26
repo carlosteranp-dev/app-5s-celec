@@ -38,18 +38,20 @@ export function motivoNaAutomatico(inst, item, tipoArea, esPrimera) {
 
 export const esNaAutomatico = (inst, item, tipoArea, esPrimera) => motivoNaAutomatico(inst, item, tipoArea, esPrimera) !== null;
 
-const respuestaVacia = (codigo) => ({ codigo, valor: null, na: null, na_justificacion: '', observacion: '', foto_ids: [] });
+const respuestaVacia = (codigo) => ({ codigo, valor: null, na: null, na_justificacion: '', observacion: '', foto_ids: [], foto_na: false });
 
 /**
  * Crea o ajusta la lista de respuestas: una por ítem del módulo, con el N/A automático
- * puesto o quitado según el tipo de área y si es la primera evaluación. No pierde datos del evaluador.
+ * puesto o quitado según el tipo de área y si es la primera evaluación. No pierde datos del evaluador:
+ * un ítem que pasa a N/A automático conserva su calificación, observación y fotos, y las recupera si el
+ * tipo de área vuelve a ser uno al que el ítem aplica (así se puede corregir el tipo de área sin perder nada).
  */
 export function sincronizarRespuestas(inst, moduloId, respuestas, { tipoArea, esPrimera }) {
   const previas = new Map((respuestas || []).map((r) => [r.codigo, r]));
   return itemsDelModulo(inst, moduloId).map(({ item }) => {
     const r = { ...respuestaVacia(item.codigo), ...(previas.get(item.codigo) || {}) };
     if (esNaAutomatico(inst, item, tipoArea, esPrimera)) {
-      return { ...r, valor: null, na: 'automatico', na_justificacion: '' };
+      return { ...r, na: 'automatico', na_justificacion: '' };
     }
     return r.na === 'automatico' ? { ...r, na: null } : r;
   });
@@ -170,7 +172,8 @@ export function problemasDeRespuesta(inst, respuesta, { accionesDelItem = 0 } = 
   if (!valorValido(respuesta.valor)) return ['pendiente'];
   const problemas = [];
   const { foto_obligatoria_en_niveles: fotos, accion_obligatoria_en_niveles: acciones } = inst.reglas;
-  if (fotos.includes(respuesta.valor) && !(respuesta.foto_ids?.length > 0)) problemas.push('falta_foto');
+  // "N/A foto": el evaluador indica que no se puede evidenciar con una foto (p. ej., nivel 0: no hay nada que fotografiar).
+  if (fotos.includes(respuesta.valor) && !(respuesta.foto_ids?.length > 0) && !respuesta.foto_na) problemas.push('falta_foto');
   if (acciones.includes(respuesta.valor) && accionesDelItem < 1) problemas.push('falta_accion');
   return problemas;
 }

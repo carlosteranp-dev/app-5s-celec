@@ -5,18 +5,20 @@
 // El bloque SELLO lo escribe `node tools/sellar.mjs`; no lo edite a mano.
 
 // <SELLO>
-const VERSION = 'e5dbff5f01ba';
+const VERSION = '19a163f33992';
 const PRECACHE = [
   'assets/apple-touch-icon.png',
   'assets/icon-192.png',
   'assets/icon-512.png',
   'assets/icon-maskable-512.png',
   'assets/logo.png',
+  'catalogo_sitios.json',
   'css/app.css',
   'index.html',
   'instrumento_5S.json',
   'js/app.js',
   'js/calc.js',
+  'js/catalogo.js',
   'js/charts.js',
   'js/config.js',
   'js/contexto.js',

@@ -276,3 +276,10 @@ test('avisos: instrumento con la misma versión y otro contenido, y varias evalu
   assert.ok(p.avisos.some((a) => /más de una evaluación marcada como "primera"/.test(a)));
   assert.equal(p.resumen.instrumentos.nuevos, 1);
 });
+
+test('la opción "N/A foto" se conserva al importar', () => {
+  const ev = evaluacion(100, 10, { respuestas: [resp('S1.1', { foto_na: true }), resp('S1.2')] });
+  const p = plan(archivo({ sitios: [sitio(1, 'S')], areas: [area(10, 1, 'A')], evaluaciones: [ev] }));
+  assert.equal(p.poner.evaluaciones[0].respuestas[0].foto_na, true);
+  assert.equal(p.poner.evaluaciones[0].respuestas[1].foto_na, false);
+});
