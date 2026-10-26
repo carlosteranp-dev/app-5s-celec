@@ -100,7 +100,7 @@ export async function render(cont, { id, s }, query) {
         <div class="fotos__botones">
           <button type="button" class="btn btn--chico" data-foto="camara" ${lleno ? 'disabled' : ''}>Tomar foto</button>
           <button type="button" class="btn btn--chico" data-foto="galeria" ${lleno ? 'disabled' : ''}>Galería</button>
-          ${obligatoria ? `<button type="button" class="btn btn--chico ${r.foto_na ? 'btn--activo' : ''}" data-foto-na aria-pressed="${Boolean(r.foto_na)}" title="Use esta opción cuando no hay nada que fotografiar o no se puede evidenciar">${r.foto_na ? '✓ ' : ''}N/A foto</button>` : ''}
+          <button type="button" class="btn btn--chico ${r.foto_na ? 'btn--activo' : ''}" data-foto-na aria-pressed="${Boolean(r.foto_na)}" title="Use esta opción cuando no hay nada que fotografiar o no se puede evidenciar">${r.foto_na ? '✓ ' : ''}N/A foto</button>
           <small>${lista.length}/${MAX_FOTOS_POR_ITEM} fotos${obligatoria && !r.foto_na && !lista.length ? ' · obligatoria' : ''}${r.foto_na && !lista.length ? ' · sin foto: no se evidencia' : ''}</small>
         </div>
       </div>`;
@@ -347,7 +347,7 @@ export async function render(cont, { id, s }, query) {
 
     if (nivel) {
       const nuevoValor = Number(nivel.dataset.nivel);
-      Object.assign(r, { valor: nuevoValor, na: null, na_justificacion: '', foto_na: r.valor === nuevoValor ? r.foto_na : false });
+      Object.assign(r, { valor: nuevoValor, na: null, na_justificacion: '', foto_na: r.valor === nuevoValor || r.valor === null ? r.foto_na : false });
       cambio();
       await ajustarAcciones(codigo);
       redibujar(codigo).querySelector(`[data-nivel="${nivel.dataset.nivel}"]`).focus();
